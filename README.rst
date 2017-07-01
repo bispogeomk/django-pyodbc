@@ -24,6 +24,7 @@ Features
 * [x] Django's TextField both under SQL Server 2000 and 2005.
 * [x] Passes most of the tests of the Django test suite.
 * [x] Compatible with SQL Server and SQL Server Native Client from Microsoft (Windows) and FreeTDS ODBC drivers (Linux).
+* [x] ``In _fix_aggregates, used annotation_select (newer) if available else aggregate_select``. See (https://github.com/lionheart/django-pyodbc/pull/146/commits/bf6ec4f0a96bb03a3cee018f9fa201c03e3c3dcc)
 
 TODO
 --------
@@ -36,7 +37,7 @@ Installation
 
    .. code:: python
 
-      pip install django-pyodbc
+      pip install git+https://github.com/bispogeomk/django-pyodbc
       
 2. Now you can now add a database to your settings using standard ODBC parameters.
 
