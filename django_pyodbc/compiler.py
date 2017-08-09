@@ -321,15 +321,23 @@ class SQLCompiler(compiler.SQLCompiler):
                     right_sql_quote=self.connection.ops.right_sql_quote,
                 )
         else:
-            sql = "SELECT {row_num_col}, {outer} FROM ( SELECT ROW_NUMBER() OVER ( ORDER BY {order}) as {row_num_col}, {inner}) as QQQ where {where}".format(
+            if self.query.high_mark:
+                top = "top {0}".format(self.query.high_mark)
+            else:
+                top = ""
+            sql = ("SELECT {outer} FROM ("
+                        "SELECT {top} ROW_NUMBER() OVER ("
+                            "ORDER BY {order}"
+                        ") as {row_num_col}, {inner}"
+                    ") as QQQ "
+                    "WHERE {where} ").format(
                 outer=outer_fields,
                 order=order,
                 inner=inner_select,
                 where=where_row_num,
-                row_num_col=row_num_col
+                row_num_col=row_num_col,
+                top=top
             )
-
-
         return sql, fields
 
     def _select_top(self,select,inner_sql,number_to_fetch):
